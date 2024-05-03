@@ -68,8 +68,7 @@ def get_p_q(key_length):
         
 
 
-def main():
-    key_length = int(input('Enter your key length (bit): '))
+def calculator_key(key_length):
     p, q = get_p_q(key_length)
     print('P: ', p)
     print('Q: ', q)
@@ -79,6 +78,33 @@ def main():
     print('E: ', e)
     d = calculator_d(n, e)
     print('D: ', d)
+    return n, e, d
+
+def encrypt(message, e, n):
+    encode = [ord(m) for m in message]
+
+    message_encrypt = []
+    for c in encode:
+        char_encrypt = (c ** e) % n
+        message_encrypt.append(char_encrypt)
+    return message_encrypt
     
+def decrypt(message_encrypt, d , n):
+    message_decrypt = [] 
+    for m in message_encrypt:
+        char_decrypt = (m ** d) % n
+        message_decrypt.append(char_decrypt)
+        
+    message = "".join(chr(m) for m in message_decrypt)
+    return message
+    
+def main():
+    message = input('Message: ')
+    key_length = int(input('Enter your key length (bit): '))
+    n, e, d = calculator_key(key_length)
+    message_encrypt = encrypt(message, e, n)
+    print(message_encrypt)
+    message_decrypt = decrypt(message_encrypt, d, n)
+    print(message_decrypt)
     
 main()
