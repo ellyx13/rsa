@@ -24,7 +24,7 @@ def get_coprime(n):
 
 def calculator_d(n, e):
     for i in range(3, n):
-        if (e * i) % n != 1:
+        if (e * i) % n == 1:
             return i
 
 
@@ -48,7 +48,7 @@ def is_prime(n):
     return True
 
 def get_prime(middle):
-    middle = middle / 2
+    middle = int(middle / 2)
     p = random.randint(2,middle)
     while not is_prime(p):
         p = random.randint(2,middle)
@@ -68,15 +68,17 @@ def get_p_q(key_length):
         
 
 
-def calculator_key(key_length):
+def generate_key(key_length):
     p, q = get_p_q(key_length)
     print('P: ', p)
     print('Q: ', q)
-    n = (p - 1) * (q - 1)
+    n = p * q
+    phi_n = (p - 1) * (q - 1)
     print('N: ', n)
-    e = get_coprime(n)
+    print('Phi N: ', phi_n)
+    e = get_coprime(phi_n)
     print('E: ', e)
-    d = calculator_d(n, e)
+    d = calculator_d(phi_n, e)
     print('D: ', d)
     return n, e, d
 
@@ -84,27 +86,44 @@ def encrypt(message, e, n):
     encode = [ord(m) for m in message]
 
     message_encrypt = []
+    char_length = []
     for c in encode:
         char_encrypt = (c ** e) % n
         message_encrypt.append(char_encrypt)
-    return message_encrypt
+        char_length.append(len(str(char_encrypt)))
+        
+    message_encrypt = ''.join(str(c) for c in message_encrypt)
+    char_length = ''.join(str(c) for c in char_length)
+    return message_encrypt + '010' + char_length
+    
     
 def decrypt(message_encrypt, d , n):
     message_decrypt = [] 
-    for m in message_encrypt:
+    data_encrypt = message_encrypt.split('010')
+    message_encrypt = data_encrypt[0]
+    char_length = data_encrypt[1]
+    index = 0
+    for length in char_length:
+        m = ''
+        for i in range(0, int(length)):
+            m += message_encrypt[index+i]
+        m = int(m)
         char_decrypt = (m ** d) % n
         message_decrypt.append(char_decrypt)
-        
+        index = index + int(length)
+
     message = "".join(chr(m) for m in message_decrypt)
     return message
     
-def main():
-    message = input('Message: ')
-    key_length = int(input('Enter your key length (bit): '))
-    n, e, d = calculator_key(key_length)
-    message_encrypt = encrypt(message, e, n)
-    print(message_encrypt)
-    message_decrypt = decrypt(message_encrypt, d, n)
-    print(message_decrypt)
+
+# def main():
+#     message = input('Message: ')
+#     key_length = int(input('Enter your key length (bit): '))
+#     phi_n, e, d = generate_key(key_length)
+#     message_encrypt = encrypt(message, e, phi_n)
+#     print(message_encrypt)
+#     print(''.join(str(c) for c in message_encrypt))
+#     message_decrypt = decrypt(message_encrypt, d, phi_n)
+#     print(message_decrypt)
     
-main()
+# main()
