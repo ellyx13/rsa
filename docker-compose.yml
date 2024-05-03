@@ -4,8 +4,8 @@ services:
   web:
     build: ./app
     restart: always
-    command: uvicorn main:app --reload --workers 2 --host 0.0.0.0 --port 8005 --proxy-headers
+    command: uvicorn main:app --reload --workers 2 --host 0.0.0.0 --port 8006 --proxy-headers
     volumes:
       - ./app/:/opt/python-projects/app/
     ports:
-      - "8005:8005"
+      - "8006:8006"
