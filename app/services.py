@@ -100,8 +100,8 @@ def encrypt(message, e, n):
 def decrypt(message_encrypt, d , n):
     message_decrypt = [] 
     data_encrypt = message_encrypt.split('010')
-    message_encrypt = data_encrypt[0]
-    char_length = data_encrypt[1]
+    message_encrypt = '010'.join(data_encrypt[:-1])
+    char_length = ''.join(data_encrypt[-1])
     index = 0
     for length in char_length:
         m = ''
