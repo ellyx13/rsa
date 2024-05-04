@@ -5,8 +5,9 @@ from services import generate_key, encrypt, decrypt
 
 app = FastAPI(title="RSA Nhom 7 Backend")
 
-
-
+@app.get("/ping")
+async def ping(request: Request):
+    return {'ping': 'pong'}
 
 
 
