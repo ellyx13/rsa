@@ -61,9 +61,8 @@ def get_p_q(key_length):
     while True:
         p = get_prime(middle)
         q = get_prime(middle)
-        if p * q  > start and p * q < end:
+        if p * q  > start and p * q < end and p != q:
             break
-    
     return p, q
         
 
@@ -85,15 +84,14 @@ def generate_key(key_length):
 def encrypt(message, e, n):
     encode = [ord(m) for m in message]
 
-    message_encrypt = []
-    char_length = []
+    message_encrypt = ''
+    char_length = ''
     for c in encode:
         char_encrypt = (c ** e) % n
-        message_encrypt.append(char_encrypt)
-        char_length.append(len(str(char_encrypt)))
+        char_encrypt_str = str(char_encrypt)
+        message_encrypt += char_encrypt_str
+        char_length += str((len(char_encrypt_str)))
         
-    message_encrypt = ''.join(str(c) for c in message_encrypt)
-    char_length = ''.join(str(c) for c in char_length)
     return message_encrypt + '010' + char_length
     
     
