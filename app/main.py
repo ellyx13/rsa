@@ -12,7 +12,7 @@ async def ping(request: Request):
 
 
 class GenerateKeyRequest(BaseModel):
-    key_length: Literal[4, 8, 16]
+    key_length: Literal[8, 16]
 
 class GenerateKeyResponse(BaseModel):
     public_key: int
